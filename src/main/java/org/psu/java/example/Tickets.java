@@ -21,8 +21,8 @@ import org.springframework.context.annotation.ComponentScan;
 @AllArgsConstructor
 @SpringBootApplication
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ComponentScan("org.psu.java.example.context")
-public class Tickets implements CommandLineRunner {
+@ComponentScan({ "org.psu.java.example.context",  "org.psu.java.example.presentation"})
+public class Tickets {
 
     ApplicationContext context;
 
@@ -37,7 +37,6 @@ public class Tickets implements CommandLineRunner {
         SpringApplication.run(Tickets.class);
     }
 
-    @Override
     public void run(String... args) {
         log.info("Hello world Spring Boot style!");
 

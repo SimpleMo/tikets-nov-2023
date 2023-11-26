@@ -7,7 +7,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.Spy;
@@ -19,8 +18,9 @@ import org.psu.java.example.infrastructure.TicketImpl;
 import java.util.Iterator;
 import java.util.stream.IntStream;
 
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.when;
 
 /**
  * Тесты для {@link FortunateTicketStreamImpl}

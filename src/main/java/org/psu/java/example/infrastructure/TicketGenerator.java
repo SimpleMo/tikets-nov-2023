@@ -7,7 +7,6 @@ import lombok.experimental.FieldDefaults;
 import org.psu.java.example.domain.Ticket;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;

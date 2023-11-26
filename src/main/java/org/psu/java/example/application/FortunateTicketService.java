@@ -1,15 +1,8 @@
 package org.psu.java.example.application;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
 import org.psu.java.example.domain.Ticket;
-import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
-import java.util.function.UnaryOperator;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 public interface FortunateTicketService {
     static FortunateTicketService getInstance() {
@@ -28,7 +21,7 @@ public interface FortunateTicketService {
             }
         }
         return result;
-    };
+    }
 }
 
 class FortunateTicketImpl implements FortunateTicketService {

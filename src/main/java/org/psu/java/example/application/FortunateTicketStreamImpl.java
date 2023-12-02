@@ -12,8 +12,8 @@ import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-@Service
-@Primary
+@Service("fortunateTicketService")
+//@Primary
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class FortunateTicketStreamImpl implements FortunateTicketService {

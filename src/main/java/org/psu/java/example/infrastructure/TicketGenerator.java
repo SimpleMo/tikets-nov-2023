@@ -108,9 +108,7 @@ class SixDigitsTicketGenerator implements TicketGenerator {
     }
 }
 
-@Service
-@Primary
-@Scope("prototype")
+@Service("sixDigitsTicketGenerator")
 class RecordTicketGenerator extends AbstractGenerator {
 
     public RecordTicketGenerator() {

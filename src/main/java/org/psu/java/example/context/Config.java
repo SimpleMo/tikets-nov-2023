@@ -22,19 +22,16 @@ import java.util.function.UnaryOperator;
 @Configuration
 @ComponentScan(basePackageClasses = {TicketImpl.class, FortunateTicketService.class})
 public class Config {
-    @Bean
-    @Scope("prototype")
+    @Bean("evenFortunateTicketService")
     FortunateTicketService getEvenFortunateTicketService(@Qualifier("evenDecorator") UnaryOperator<Ticket> decorator) {
         return new FortunateTicketStreamImpl(decorator);
     }
-    @Bean
-    @Scope("prototype")
+    @Bean("multipleOfFiveFortunateTicketService")
     FortunateTicketService getMultipleOfFiveFortunateTicketService(@Qualifier("multipleOfFiveDecorator") UnaryOperator<Ticket> decorator) {
         return new FortunateTicketStreamImpl(decorator);
     }
 
-    @Bean
-    @Scope("prototype")
+    @Bean("fourDigitsTicketGenerator")
     TicketGenerator getFourDigitsTicketGenerator() {
         return TicketGenerator.getInstance(GeneratorType.FOUR);
     }

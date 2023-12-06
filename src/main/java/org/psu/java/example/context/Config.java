@@ -8,6 +8,7 @@ import org.psu.java.example.domain.Ticket;
 import org.psu.java.example.infrastructure.GeneratorType;
 import org.psu.java.example.infrastructure.TicketGenerator;
 import org.psu.java.example.infrastructure.TicketImpl;
+import org.psu.java.example.presentation.entities.ResponseHistoryRepository;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;

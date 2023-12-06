@@ -5,19 +5,25 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.psu.java.example.application.FortunateTicketService;
 import org.psu.java.example.infrastructure.GeneratorType;
 import org.psu.java.example.infrastructure.TicketGenerator;
+import org.psu.java.example.presentation.entities.ResponseHistory;
+import org.psu.java.example.presentation.entities.ResponseHistoryRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 /**
  * REST-контроллер для работы с билетами
  */
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tickets")
@@ -30,6 +36,7 @@ public class TicketsController {
     FortunateTicketService fortunateTicketService;
     FortunateTicketService evenFortunateTicketService;
     FortunateTicketService multipleOfFiveFortunateTicketService;
+    ResponseHistoryRepository historyRepository;
 
     @Getter(value = AccessLevel.PRIVATE, lazy = true)
     Map<Integer, FortunateTicketService> fortunateTicketServices = prepare();
@@ -79,7 +86,20 @@ public class TicketsController {
 
     @PostMapping
     public ResponseEntity<Collection<FortunateTicketResponse>> getFortunateTicketCounts(@RequestBody Collection<FortunateTicketRequest> body) {
+        var historyBuilder = ResponseHistory.builder();
+
+        historyBuilder.startTime(LocalDateTime.now());
+
         var counts = body.stream().map(this::calculate).toList();
+        var result = counts.stream().mapToInt(FortunateTicketResponse::count).sum();
+
+        historyBuilder.result(result);
+        historyBuilder.endTime(LocalDateTime.now());
+
+        var entity = historyBuilder.build();
+        var saved = historyRepository.save(entity);
+        log.info(saved.toString());
+
         return ResponseEntity.ok(counts);
     }
 

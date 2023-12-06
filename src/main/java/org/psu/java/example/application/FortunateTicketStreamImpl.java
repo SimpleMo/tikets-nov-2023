@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.psu.java.example.domain.Ticket;
+import org.psu.java.example.presentation.entities.ResponseHistoryRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 

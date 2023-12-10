@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
@@ -22,6 +23,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @EntityScan("org.psu.java.example.presentation.entities")
 @EnableJpaRepositories("org.psu.java.example.presentation.entities")
+@EnableAspectJAutoProxy
 @ComponentScan({ "org.psu.java.example.context",  "org.psu.java.example.presentation"})
 public class Tickets {
 

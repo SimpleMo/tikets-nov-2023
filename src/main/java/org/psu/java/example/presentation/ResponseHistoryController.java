@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import org.psu.java.example.presentation.entities.ResponseHistory;
 import org.psu.java.example.presentation.entities.ResponseHistoryRepository;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,7 +40,9 @@ public class ResponseHistoryController {
     }
 
     @GetMapping("/by-result/{result}")
+    @Transactional
     public List<ResponseHistory> findByResult(@PathVariable Integer result) {
+        // AOP Spring AOP Аспектоориентированное программирование
         return repository.findByResult(result);
     }
 }

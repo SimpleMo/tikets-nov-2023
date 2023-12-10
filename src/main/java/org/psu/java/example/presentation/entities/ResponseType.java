@@ -1,5 +1,6 @@
 package org.psu.java.example.presentation.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -29,7 +30,8 @@ public class ResponseType {
     @Column(name = "MULTIPLICITY")
     Integer multiplicity;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    @OneToMany(mappedBy = "responseType", cascade = CascadeType.REMOVE)
     Collection<ResponseHistory> responseHistories;
 
 }

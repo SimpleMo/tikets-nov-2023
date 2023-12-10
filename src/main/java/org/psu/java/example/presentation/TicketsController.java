@@ -11,13 +11,13 @@ import org.psu.java.example.infrastructure.GeneratorType;
 import org.psu.java.example.infrastructure.TicketGenerator;
 import org.psu.java.example.presentation.entities.ResponseHistory;
 import org.psu.java.example.presentation.entities.ResponseHistoryRepository;
+import org.psu.java.example.presentation.entities.ResponseType;
+import org.psu.java.example.presentation.entities.ResponseTypeRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -37,6 +37,7 @@ public class TicketsController {
     FortunateTicketService evenFortunateTicketService;
     FortunateTicketService multipleOfFiveFortunateTicketService;
     ResponseHistoryRepository historyRepository;
+    ResponseTypeRepository responseTypeRepository;
 
     @Getter(value = AccessLevel.PRIVATE, lazy = true)
     Map<Integer, FortunateTicketService> fortunateTicketServices = prepare();
@@ -86,31 +87,40 @@ public class TicketsController {
 
     @PostMapping
     public ResponseEntity<Collection<FortunateTicketResponse>> getFortunateTicketCounts(@RequestBody Collection<FortunateTicketRequest> body) {
-        var historyBuilder = ResponseHistory.builder();
-
-        historyBuilder.startTime(LocalDateTime.now());
-
         var counts = body.stream().map(this::calculate).toList();
-        var result = counts.stream().mapToInt(FortunateTicketResponse::count).sum();
-
-        historyBuilder.result(result);
-        historyBuilder.endTime(LocalDateTime.now());
-
-        var entity = historyBuilder.build();
-        var saved = historyRepository.save(entity);
-        log.info(saved.toString());
-
         return ResponseEntity.ok(counts);
     }
 
     private FortunateTicketResponse calculate(FortunateTicketRequest item) {
+        var responseType =
+                responseTypeRepository
+                        .findByTypeAndMultiplicity(item.type(), item.multiplicity())
+                        .orElseGet(() -> ResponseType.builder().type(item.type()).multiplicity(item.multiplicity()).responseHistories(new ArrayList<>()).build());
+
+        var historyBuilder = ResponseHistory.builder();
+        historyBuilder.startTime(LocalDateTime.now());
+
         if (item.multiplicity() == null) {
             var count = countWithGenerator(fortunateTicketService, item.type());
+            historyBuilder.result(count.getBody()).endTime(LocalDateTime.now());
+            responseType.getResponseHistories().add(historyBuilder.build());
+
+            responseTypeRepository.save(responseType);
+
             return new FortunateTicketResponse(item.type(), item.multiplicity(), count.getBody());
         }
 
         var service = getFortunateTicketServices().getOrDefault(item.multiplicity(), fortunateTicketService);
         var count = countWithGenerator(service, item.type());
+
+        historyBuilder.result(count.getBody()).endTime(LocalDateTime.now());
+        var saved = responseTypeRepository.save(responseType);
+        historyBuilder.responseType(saved);
+
+//        responseType.getResponseHistories().add(historyBuilder.build());
+        var history = historyBuilder.build();
+        historyRepository.save(history);
+
         return new FortunateTicketResponse(item.type(), item.multiplicity(), count.getBody());
     }
 
